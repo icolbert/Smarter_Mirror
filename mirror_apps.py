@@ -20,6 +20,7 @@ small_text_size = 18
 LOCALE_LOCK = threading.Lock()
 
 @contextmanager
+
 def setlocale(name): #thread proof function to work with locale
     with LOCALE_LOCK:
         saved = locale.setlocale(locale.LC_ALL)
@@ -27,6 +28,9 @@ def setlocale(name): #thread proof function to work with locale
             yield locale.setlocale(locale.LC_ALL, name)
         finally:
             locale.setlocale(locale.LC_ALL, saved)
+
+def here():
+    print('We good over here!')
 
 class Clock(Frame):
     def __init__(self, parent, *args, **kwargs):
@@ -253,7 +257,7 @@ class Forecast(Frame):
 
         self.minLbl.after(3600000, self.print_forecast)
         
-
+'''
 class FullscreenWindow:
 
     def __init__(self):
@@ -293,9 +297,11 @@ class FullscreenWindow:
         self.state = False
         self.tk.attributes("-fullscreen", False)
         return "break"
+'''
 
 if __name__ == '__main__':
     w = FullscreenWindow()
+    here()
     w.tk.mainloop()
     
 
