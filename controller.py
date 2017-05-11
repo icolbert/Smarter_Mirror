@@ -22,14 +22,32 @@ class FullscreenWindow:
         self.tk.bind("<Escape>", self.end_fullscreen)
         # clock
         self.clock = Clock(self.topFrame)
-        self.clock.pack(side=RIGHT, anchor=S, padx=50, pady=60)
+        # self.clock.pack(side=RIGHT, anchor=S, padx=50, pady=60)
         # weather
         self.weather = Weather(self.centerFrame1)
-        self.weather.pack(side=RIGHT, anchor=N, padx=50)
+        # self.weather.pack(side=RIGHT, anchor=N, padx=50)
         # forecast
         self.forecast = Forecast(self.centerFrame2)
-        self.forecast.pack(side=RIGHT, anchor=N, padx=50)
+        # self.forecast.pack(side=RIGHT, anchor=N, padx=50)
+        self.clock_button = Button(self.tk, text='clock', command=self.set_clock)
+        self.clock_button.pack(side=LEFT)
+        self.weather_button = Button(self.tk, text='weather', command=self.set_weather)
+        self.weather_button.pack(side=LEFT)
+        self.forecast_button = Button(self.tk, text='forecast', command=self.set_forecast)
+        self.forecast_button.pack(side=LEFT)
 
+    
+    def set_clock(self):
+        in_here()
+        self.clock.pack(side=RIGHT, anchor=N, padx=50, pady=60)
+        out_here()
+
+    def set_weather(self):
+        self.weather.pack(side=RIGHT, anchor=N, padx=50)
+
+    def set_forecast(self):
+        self.forecast.pack(side=RIGHT, anchor=N, padx=50)
+        
 
     def toggle_fullscreen(self, event=None):
         self.state = not self.state  # Just toggling the boolean
