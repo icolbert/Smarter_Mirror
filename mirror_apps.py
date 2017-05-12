@@ -20,7 +20,6 @@ small_text_size = 18
 LOCALE_LOCK = threading.Lock()
 
 @contextmanager
-
 def setlocale(name): #thread proof function to work with locale
     with LOCALE_LOCK:
         saved = locale.setlocale(locale.LC_ALL)
@@ -241,8 +240,8 @@ class Forecast(Frame):
                 '     Tuesday',
                 'Wednesday',
                 '    Thursday',
-                '         Friday',
-                '    Saturday']
+                '            Friday',
+                '       Saturday']
 
         minimum = maximum = future = ''
         j = 0
