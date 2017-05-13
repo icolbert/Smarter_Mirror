@@ -113,14 +113,14 @@ class Weather(Frame):
             self.currentTempLbl.after(120000, self.get_weather)
 
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             print('Error: ',e)
-            print('Cannot get weather')    
+            print("Could not get weather\n")
+            self.currentTempLbl.config(text='Could not retrieve weather')
 
 
 # class Forecast uses the frame function from tkinter as its parent as well
 # Uses the same API as the weather class, except gets the 5 day/3 hour forecast
-
 class Forecast(Frame):
     def __init__(self,parent,*args,**kwargs):
         self.DoW = int(time.strftime('%w')) #initialize the numerical day of the week
@@ -149,7 +149,7 @@ class Forecast(Frame):
         
         except Exception as e:
             print('Error: ',e)
-            print('Cannot get forecast')
+            print("Could not retrieve forecast.\n")
 
     def forecast_display(self):
         try:
@@ -190,7 +190,6 @@ class Forecast(Frame):
                         check = str(year)+'-'+str(month+1)+'-01'
 
                 if check in data[j]['dt_txt']:
-                    
                     #print(data[j]['main']['temp'],type(data[j]['main']['temp']))
                     if data[j]['main']['temp'] > forecast[i-self.DoW,0]:
                         #print(str(data[j]['main']['temp'])+' vs '+str(forecast[i-DoW,0]))
@@ -221,45 +220,61 @@ class Forecast(Frame):
 
         except Exception as e:
             print('Error: ',e)
-            print('Cannot display forecast')
 
     def print_forecast(self):
-        data = self.forecast_display()
-        units = [self.DoW+1, self.DoW+2, self.DoW+3]
+        try:
+            data = self.forecast_display()
+            units = [self.DoW+1, self.DoW+2, self.DoW+3]
 
-        # solves end of week edge cases
-        if self.DoW == 6:
-            units = [0, 1, 2]
-        elif self.DoW == 5:
-            units = [6, 0, 1]
-        elif self.DoW == 4:
-            units = [5, 6, 0]
+            # solves end of week edge cases
+            if self.DoW == 6:
+                units = [0, 1, 2]
+            elif self.DoW == 5:
+                units = [6, 0, 1]
+            elif self.DoW == 4:
+                units = [5, 6, 0]
             
-        days = ['         Sunday',
-                '         Monday',
-                '     Tuesday',
-                'Wednesday',
-                '    Thursday',
-                '            Friday',
-                '       Saturday']
+            days = ['         Sunday',
+                    '         Monday',
+                    '     Tuesday',
+                    'Wednesday',
+                    '    Thursday',
+                    '            Friday',
+                    '       Saturday']
 
-        minimum = maximum = future = ''
-        j = 0
-        while j < 3:
-            if j < 2:
-                minimum += '%d\n' % data[j+1,1]
-                maximum += '%d\n' % data[j+1,0]
-                future  += '%s\n' % days[units[j]]
-            else:
-                minimum += '%d' % data[j+1,1]
-                maximum += '%d' % data[j+1,0]
-                future  += days[units[j]]
-            j+=1
+            minimum = maximum = future = ''
+            j = 0
+            while j < 3:
+                if j < 2:
+                    minimum += '%d\n' % data[j+1,1]
+                    maximum += '%d\n' % data[j+1,0]
+                    future  += '%s\n' % days[units[j]]
+                else:
+                    minimum += '%d' % data[j+1,1]
+                    maximum += '%d' % data[j+1,0]
+                    future  += days[units[j]]
+                j+=1
             
-        self.minLbl.config(text=minimum)
-        self.maxLbl.config(text=maximum)
-        self.dayLbl.config(text=future)
+            self.minLbl.config(text=minimum)
+            self.maxLbl.config(text=maximum)
+            self.dayLbl.config(text=future)
 
-        self.minLbl.after(3600000, self.print_forecast)
+            self.minLbl.after(3600000, self.print_forecast)
+            
+        except Exception as e:
+            print('Error:',e)
+            print("Could not retrieve 3-day forecast.\n")
+            self.dayLbl.config(text='Could not retrieve 3-day forecast')
+
+class control_display(Frame):
+    def __init__(self, parent, frame, COMMAND, *args,**kwargs):
+        Frame.__init__(self,parent,bg='grey10')
+
+        self.clock_button = Button(frame, text='clock', command=COMMAND['clock']) # clock button
+        self.clock_button.pack(side=BOTTOM)
+        self.weather_button = Button(frame, text='weather',command=COMMAND['weather']) # weather button
+        self.weather_button.pack(side=BOTTOM)
+        self.forecast_button = Button(frame, text='forecast',command=COMMAND['forecast']) # forecast button
+        self.forecast_button.pack(side=BOTTOM)
+
         
-

@@ -12,28 +12,29 @@ class FullscreenWindow:
         self.topFrame = Frame(self.tk, background = 'grey10')
         self.centerFrame1 = Frame(self.tk, background = 'grey10')
         self.centerFrame2 = Frame(self.tk, background = 'grey10')
+        self.leftFrame1 = Frame(self.tk, background = 'grey10')
+        self.leftFrame2 = Frame(self.tk, background = 'grey10')
         self.bottomFrame = Frame(self.tk, background = 'grey10')
-        
+
+        self.leftFrame1.pack(side=LEFT, fill=Y)
+        self.leftFrame2.pack(side=LEFT, fill=Y)
         self.topFrame.pack(side = TOP, fill=X)
         self.centerFrame1.pack(side = TOP, fill=X)
         self.centerFrame2.pack(side=TOP, fill=X)
         self.bottomFrame.pack(side = BOTTOM, fill=X, expand = YES)
         
-        self.state = False
+        self.state = True
         self.tk.bind("<Return>", self.toggle_fullscreen)
         self.tk.bind("<Escape>", self.end_fullscreen)
 
         self.clock = Clock(self.topFrame) # setting clock in the top frame (packed on the right)
         self.weather = Weather(self.centerFrame1) # setting the weather in the highest center frame
         self.forecast = Forecast(self.centerFrame2) # setting forecast in the second center frame
-
-        self.clock_button = Button(self.tk, text='clock', command=self.set_clock) # clock button
-        self.clock_button.pack(side=LEFT)
-        self.weather_button = Button(self.tk, text='weather', command=self.set_weather) # weather button
-        self.weather_button.pack(side=LEFT)
-        self.forecast_button = Button(self.tk, text='forecast', command=self.set_forecast) # forecast button
-        self.forecast_button.pack(side=LEFT)
-    
+        
+        commands = {'clock':self.set_clock, 'weather':self.set_weather, 'forecast':self.set_forecast}
+        self.buttons = control_display(self.tk,self.leftFrame1,commands)
+        self.tk.attributes("-fullscreen", self.state)
+        
     def set_clock(self): # command attached to the clock button
         global clock_count
         if clock_count == 0:
@@ -62,7 +63,7 @@ class FullscreenWindow:
             forecast_count-=1
         
     def toggle_fullscreen(self, event=None):
-        self.state = not self.state  # Just toggling the boolean
+        self.state = not self.state  # Just toggling the boolean state
         self.tk.attributes("-fullscreen", self.state)
         return "break"
 
