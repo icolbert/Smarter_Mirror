@@ -98,7 +98,6 @@ class Weather(Frame):
     def get_weather(self):
 
         '''
-        API Key: e8f68888e32b9e688db40c7a784aa417
         '''
         
         try:
